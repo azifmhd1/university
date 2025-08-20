@@ -20,11 +20,13 @@ class Student(models.Model):
     duration = models.CharField(max_length=50, blank=True, null=True)   # 👈 Course duration
     register_no = models.CharField(max_length=20, unique=True, blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
+    email = models.EmailField(max_length=254, blank=True, null=True)    # 👈 New field
     address = models.TextField(blank=True, null=True)
     photo = models.ImageField(upload_to="student_photos/", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} ({self.register_no})"
+        return f"{self.user.username} - {self.register_no}"
+
 
 
 
