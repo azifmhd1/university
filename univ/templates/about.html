@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About | Skillera University{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <!-- 🔵 Stylish Heading -->
+  <h1 class="text-center mb-5 fw-bold text-primary" style="font-size: 2.5rem;">
+    About <span class="text-dark">Skillera University</span>
+  </h1>
+
+  <div class="row align-items-center g-5">
+
+    <!-- 📄 Text Section -->
+    <div class="col-md-6">
+      <div class="p-4 bg-white shadow-sm rounded-3">
+        <p class="fs-5 mb-3">
+          <strong>Skillera University</strong> has a proud tradition of excellence in education, research, and innovation.
+          We are committed to shaping future leaders through holistic education and a vibrant campus life.
+        </p>
+        <p class="fs-5">
+          With a wide range of programs in <strong>Science, Commerce, Arts,</strong> and <strong>Technology</strong>, our highly qualified faculty and modern infrastructure provide an environment where students thrive.
+        </p>
+      </div>
+    </div>
+
+    <!-- 🖼️ Image Section -->
+    <div class="col-md-6">
+      <img src="{% static 'images/about.jpg' %}" class="img-fluid rounded-4 shadow-lg" alt="About Skillera University">
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

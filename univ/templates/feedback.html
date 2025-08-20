@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Feedback{% endblock %}
+
+{% block content %}
+<style>
+    /* Speech bubble style for feedback */
+    .feedback-bubble {
+        background: #f1f1f1;
+        border-radius: 15px;
+        padding: 15px 20px;
+        position: relative;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .feedback-bubble::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 20px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: #f1f1f1 transparent transparent transparent;
+    }
+    .feedback-name {
+        font-weight: bold;
+        color: #28a745;
+    }
+    .feedback-date {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    /* Star rating form style */
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: center;
+        font-size: 2rem;
+        cursor: pointer;
+        margin-bottom: 15px;
+    }
+    .star-rating input { display: none; }
+    .star-rating label {
+        color: #ccc;
+        padding: 0 5px;
+        transition: color 0.2s;
+    }
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: #f5b301;
+    }
+</style>
+
+<div class="container mt-5">
+    <h1 class="text-success text-center mb-4">Feedback</h1>
+
+    <!-- Feedback Form -->
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.name.label_tag }}
+                            {{ form.name }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.email.label_tag }}
+                            {{ form.email }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.message.label_tag }}
+                            {{ form.message }}
+                        </div>
+
+                        <!-- Star rating field -->
+                        <div class="star-rating">
+                            <input type="radio" name="rating" id="star5" value="5"><label for="star5">★</label>
+                            <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                            <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                            <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                            <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success">Submit Feedback</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Previous Feedbacks -->
+    <h3 class="mt-5 text-center">What Others Say</h3>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% if feedback_list %}
+                {% for fb in feedback_list %}
+                    <div class="feedback-bubble">
+                        <div class="feedback-name">{{ fb.name }}</div>
+                        <div class="feedback-date">{{ fb.created_at|date:"F j, Y, g:i a" }}</div>
+
+                        <!-- Display stars -->
+                        <div>
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= fb.rating %}
+                                    <span style="color:#f5b301;">★</span>
+                                {% else %}
+                                    <span style="color:#ccc;">★</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <p class="mt-2 mb-0">{{ fb.message }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No feedback yet. Be the first to share your thoughts!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

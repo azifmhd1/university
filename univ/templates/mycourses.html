@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Courses | Skillera University{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Page Heading -->
+    <h2 class="fw-bold text-primary mb-4">
+        <i class="bi bi-book me-2"></i> My Courses
+    </h2>
+
+    <p class="text-muted">
+        Here are the courses you have enrolled in. Click the "View Course" button to see more details for each course.
+    </p>
+
+    <!-- List of Courses -->
+    <div class="row g-4">
+        <!-- Course Card 1: Data Structures & Algorithms -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-dark">Data Structures & Algorithms</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Course Code: CS-201</h6>
+                    <p class="card-text mt-3">
+                        Algorithms, data structures, and their applications are covered in this course. It is an important subject for computer science students.
+                    </p>
+                    <a href="#" class="btn btn-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Card 2: Introduction to Artificial Intelligence -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-dark">Introduction to Artificial Intelligence</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Course Code: AI-301</h6>
+                    <p class="card-text mt-3">
+                        This course introduces the basic concepts of artificial intelligence, machine learning, and neural networks.
+                    </p>
+                    <a href="#" class="btn btn-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Card 3: Web Development with Django -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-dark">Web Development with Django</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Course Code: WEB-405</h6>
+                    <p class="card-text mt-3">
+                        Build powerful and scalable web applications using the Python-based Django framework.
+                    </p>
+                    <a href="#" class="btn btn-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Card 4: Database Management Systems -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold text-dark">Database Management Systems</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Course Code: DB-203</h6>
+                    <p class="card-text mt-3">
+                        Learn to design, implement, and manage databases using SQL and other tools.
+                    </p>
+                    <a href="#" class="btn btn-primary btn-sm mt-2">View Course</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

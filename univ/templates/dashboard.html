@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Student Dashboard | University{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Welcome Hero -->
+    <div class="p-4 rounded-4 shadow-sm mb-4" style="background: linear-gradient(135deg, #0d6efd, #6610f2); color: white;">
+        <div class="d-flex align-items-center">
+            <div class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center me-3"
+                 style="width:70px; height:70px; font-size:1.5rem; font-weight: bold;">
+                {{ student.user.username|slice:":1" }}
+            </div>
+            <div>
+                <h3 class="mb-0 fw-bold">Welcome, {{ student.user.username }} 👋</h3>
+                <p class="mb-0">Your student dashboard at a glance</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Notices (Updates) -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <div class="text-center">
+                <i class="bi bi-bell display-6 mb-2 text-warning"></i>
+                <h5 class="fw-bold">New Updates</h5>
+                <p class="mb-3">{{ notices_count }} Updates</p>
+            </div>
+
+            <!-- 🔔 Notices List -->
+            <ul class="list-group list-group-flush">
+                {% for notice in notices %}
+                    <li class="list-group-item">
+                        <strong>{{ notice.title }}</strong><br>
+                        <small class="text-muted">
+                            {{ notice.created_at|date:"jS M Y, h:i A" }}
+                        </small>
+                        <p class="mb-0">{{ notice.description }}</p>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-center text-muted">
+                        No updates available
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Scheduled Assessments -->
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <h4 class="fw-bold text-warning mb-3">
+                <i class="bi bi-calendar-event me-2"></i> Scheduled Assessments
+            </h4>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Subject</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Venue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for assess in assessments %}
+                        <tr>
+                            <td>{{ assess.subject }}</td>
+                            <td>{{ assess.date|date:"d M Y" }}</td>
+                            <td>{{ assess.time|time:"h:i A" }}</td>
+                            <td>{{ assess.venue }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No assessments scheduled</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Fee Payment -->
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <h4 class="fw-bold text-info mb-3">
+                <i class="bi bi-cash-coin me-2"></i> Exam Fees
+            </h4>
+            <div class="p-3 rounded-3" style="background: #f8f9fa;">
+                {% if exam_fee %}
+                    <p><strong>Amount:</strong> ₹{{ exam_fee.amount }}</p>
+                    <p><strong>Status:</strong> 
+                        {% if exam_fee.paid %}
+                            <span class="badge bg-success">Paid</span>
+                        {% else %}
+                            <span class="badge bg-danger">Pending</span>
+                        {% endif %}
+                    </p>
+                    {% if not exam_fee.paid %}
+                        <a href="{% url 'pay_exam_fee' %}" class="btn btn-success mt-2">
+                            <i class="bi bi-credit-card me-1"></i> Pay Now
+                        </a>
+                    {% endif %}
+                {% else %}
+                    <p>No exam fee details available</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile (moved before logout) -->
+    <div class="card shadow-lg border-0 rounded-4 mb-4">
+        <div class="card-body">
+            <h4 class="fw-bold text-success mb-3">
+                <i class="bi bi-card-checklist me-2"></i> Profile
+            </h4>
+            <div class="p-3 rounded-3 d-flex align-items-start" style="background: #f8f9fa;">
+                <!-- Student Photo -->
+                <div class="me-3">
+                    {% if student.photo %}
+                        <img src="{{ student.photo.url }}" alt="Student Photo"
+                             class="rounded-3 shadow-sm"
+                             style="width: 100px; height: 120px; object-fit: cover; border: 2px solid #ccc;">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center bg-light text-muted rounded-3"
+                             style="width: 100px; height: 120px; border: 2px dashed #ccc;">
+                            No Photo
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- Student Details -->
+                <div>
+                    <p><strong>Name:</strong> {{ student.user.username }}</p>
+                    <p><strong>Register No:</strong> {{ student.register_no }}</p>
+                    <p><strong>Course:</strong> {{ student.course }}</p>
+                    <p><strong>Duration:</strong> {{ student.duration }}</p>
+                    <p><strong>Phone:</strong> {{ student.phone }}</p>
+                    {% if next_exam %}
+                        <p><strong>Exam Date:</strong> {{ next_exam.date|date:"jS F Y" }}</p>
+                        <p><strong>Exam Center:</strong> {{ next_exam.center }}</p>
+                    {% else %}
+                        <p>No exam scheduled</p>
+                    {% endif %}
+                    <a href="{% url 'download_admit_card' %}" class="btn btn-primary mt-2">
+                        <i class="bi bi-download me-1"></i> Download Admit Card
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout -->
+    <div class="d-grid mt-3">
+        <a href="{% url 'logout' %}" class="btn btn-danger btn-lg shadow rounded-4">
+            <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </a>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Pay Exam Fee{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg border-0 rounded-4 p-4">
+    <h3 class="fw-bold text-center text-primary mb-3">Exam Fee Payment</h3>
+    <p class="text-center">Amount to be paid: <strong>₹{{ order_amount|floatformat:2 }}</strong></p>
+
+    <div class="text-center mt-4">
+      <form>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"
+                data-key="{{ razorpay_key }}"
+                data-amount="{{ order_amount }}"
+                data-currency="INR"
+                data-order_id="{{ order_id }}"
+                data-buttontext="Pay Now"
+                data-name="University Exam Portal"
+                data-description="Exam Fee Payment"
+                data-theme.color="#0d6efd">
+        </script>
+        <input type="hidden" name="hidden">
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

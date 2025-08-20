@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Upcoming Events | Skillera University{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Page Heading -->
+    <h2 class="fw-bold text-success mb-4">
+        <i class="bi bi-calendar-event me-2"></i> Upcoming Events
+    </h2>
+
+    <p class="text-muted">
+        You can find all the important upcoming academic events here.
+    </p>
+
+    <!-- List of Events -->
+    <ul class="list-group shadow-sm rounded-4">
+        <!-- Event 1 -->
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1 fw-semibold">Mid-Term Exams Start</h5>
+                <p class="mb-1 text-muted small">
+                    Mid-term examinations for all semesters will commence on this date.
+                </p>
+            </div>
+            <div>
+                <span class="badge bg-danger rounded-pill">Exam</span>
+                <span class="badge bg-secondary rounded-pill">Oct 10, 2025</span>
+            </div>
+        </li>
+        <!-- Event 2 -->
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1 fw-semibold">AI Workshop: 'Future of Tech'</h5>
+                <p class="mb-1 text-muted small">
+                    A one-day workshop on new advancements in artificial intelligence and technology.
+                </p>
+            </div>
+            <div>
+                <span class="badge bg-info rounded-pill">Workshop</span>
+                <span class="badge bg-secondary rounded-pill">Oct 25, 2025</span>
+            </div>
+        </li>
+        <!-- Event 3 -->
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1 fw-semibold">Semester Project Submission Deadline</h5>
+                <p class="mb-1 text-muted small">
+                    The final date for all final year students to submit their projects.
+                </p>
+            </div>
+            <div>
+                <span class="badge bg-warning text-dark rounded-pill">Deadline</span>
+                <span class="badge bg-secondary rounded-pill">Nov 15, 2025</span>
+            </div>
+        </li>
+        <!-- Event 4 -->
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1 fw-semibold">University Convocation Ceremony</h5>
+                <p class="mb-1 text-muted small">
+                    The graduation ceremony will be held at the university auditorium.
+                </p>
+            </div>
+            <div>
+                <span class="badge bg-primary rounded-pill">Ceremony</span>
+                <span class="badge bg-secondary rounded-pill">Dec 20, 2025</span>
+            </div>
+        </li>
+    </ul>
+</div>
+{% endblock %}
