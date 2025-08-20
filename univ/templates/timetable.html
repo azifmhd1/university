@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Exam Timetable - Skillera University{% endblock %}
+
+{% block content %}
+<h3>Exam Timetable</h3>
+<hr>
+<table class="table table-bordered table-striped">
+  <thead class="table-success">
+    <tr>
+      <th>Date</th>
+      <th>Course</th>
+      <th>Semester</th>
+      <th>Subject</th>
+      <th>Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>14-Aug-2025</td>
+      <td>B.Com</td>
+      <td>6th</td>
+      <td>Financial Accounting</td>
+      <td>10:00 AM – 1:00 PM</td>
+    </tr>
+    <tr>
+      <td>16-Aug-2025</td>
+      <td>B.Com</td>
+      <td>6th</td>
+      <td>Costing</td>
+      <td>10:00 AM – 1:00 PM</td>
+    </tr>
+    <tr>
+      <td>17-Aug-2025</td>
+      <td>B.Sc</td>
+      <td>4th</td>
+      <td>Physics</td>
+      <td>2:00 PM – 5:00 PM</td>
+    </tr>
+    <tr>
+      <td>19-Aug-2025</td>
+      <td>M.Com</td>
+      <td>2nd</td>
+      <td>Research Methodology</td>
+      <td>10:00 AM – 1:00 PM</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="mt-3">
+  <a href="{% url 'download_timetable' %}" class="btn btn-outline-primary">
+    Download Full Timetable (PDF)
+  </a>
+</p>
+{% endblock %}

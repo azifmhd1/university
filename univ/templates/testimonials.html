@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Testimonials{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-primary text-center">Testimonials</h1>
+    <p class="lead text-center">See what our students and alumni say about us.</p>
+
+    <div class="row mt-5">
+        <!-- 1 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"The faculty here are incredibly supportive and truly passionate about teaching. I felt prepared for my career from day one."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Aisha Sharma, Class of 2022</cite><br>
+                    <small>BSc Computer Science</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"The campus community is vibrant and welcoming. I not only learned a lot but also made lifelong friendships."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Rajesh Kumar, Class of 2021</cite><br>
+                    <small>MBA</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"I'm grateful for the hands-on projects and internships. They gave me the practical experience I needed to succeed in my field."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Priya Singh, Class of 2023</cite><br>
+                    <small>BA Media Studies</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"The professors always pushed me to do my best and guided me through every step."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Anil Mehta, Class of 2020</cite><br>
+                    <small>BBA</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"The extracurricular activities and clubs made my college life exciting and memorable."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Fatima Khan, Class of 2019</cite><br>
+                    <small>MA English Literature</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"The industry exposure I got here was unmatched. I felt job-ready upon graduation."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Rohit Sharma, Class of 2021</cite><br>
+                    <small>MSc Data Science</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"This university helped me grow academically and personally. I owe my success to my mentors here."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Neha Kapoor, Class of 2018</cite><br>
+                    <small>BCom</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"From classroom learning to real-world applications, every step was a valuable experience."</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Akash Verma, Class of 2020</cite><br>
+                    <small>BSc Mathematics</small>
+                </footer>
+            </div>
+        </div>
+
+        <!-- 9 -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm h-100 text-center p-3">
+                <p class="card-text fst-italic lead">"A perfect balance of academics, culture, and support. Best years of my life!"</p>
+                <footer class="blockquote-footer mt-3">
+                    <cite>Sneha Iyer, Class of 2022</cite><br>
+                    <small>BSc Psychology</small>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Section -->
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h2 class="text-primary mb-4">Watch Our Student Testimonial</h2>
+        </div>
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <video controls>
+                            <source src="{% static 'videos/Student Testimonial - Varnika Chauhan.mp4' %}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

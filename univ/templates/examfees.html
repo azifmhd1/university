@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Exam Fees - Skillera University{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Exam Fees</h3>
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th>Course</th>
+                    <th>Exam Fee</th>
+                    <th>Late Fee</th>
+                    <th>Last Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for f in fees %}
+                <tr>
+                    <td>{{ f.course }}</td>
+                    <td class="text-end">₹{{ f.fee }}</td>
+                    <td class="text-end">₹{{ f.late }}</td>
+                    <td>{{ f.last_date }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">No exam fee details available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

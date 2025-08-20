@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home | Skillera University{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!-- ✨ Title -->
+  <h1 class="text-center mb-5 fw-bold text-primary" style="font-size: 2.8rem;">
+    Welcome to <span class="text-dark">Skillera University</span>
+  </h1>
+
+  <!-- 🌟 Bootstrap Carousel -->
+  <div id="campusCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner rounded-4 shadow-lg">
+      <div class="carousel-item active">
+        <img src="{% static 'images/univ1.webp' %}" height="400px" class="d-block w-100" alt="Campus 1">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/univ2.webp' %}" height="400px" class="d-block w-100" alt="Campus 2">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/univ3.webp' %}" height="400px" class="d-block w-100" alt="Campus 3">
+      </div>
+    </div>
+
+    <!-- Carousel controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#campusCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#campusCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <!-- 🏫 University Description -->
+  <div class="mt-5 p-4 bg-light rounded shadow-sm">
+    <h2 class="text-center text-dark mb-4">About Skillera University</h2>
+    <p class="lead text-justify">
+      Skillera University is a premier institution committed to shaping future leaders through innovation, technology, and holistic education. 
+      Established with a vision to empower students with knowledge and skills for the real world, we offer a wide range of programs in Science, Technology, Commerce, and Arts.
+    </p>
+    <p class="text-justify">
+      Our campus blends academic excellence with state-of-the-art infrastructure, vibrant student life, and experienced faculty who are passionate about teaching and mentoring.
+      We focus on fostering critical thinking, creativity, and leadership abilities in every student.
+    </p>
+    <p class="text-justify">
+      Whether you're beginning your academic journey or seeking to enhance your skills, Skillera University is the place where your potential meets endless possibilities.
+      Join us and be part of a community that's committed to making a difference.
+    </p>
+  </div>
+
+</div>
+{% endblock %}
