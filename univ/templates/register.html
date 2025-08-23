@@ -19,7 +19,7 @@
                     {% endfor %}
                 {% endif %}
 
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     
                     <!-- Username -->
@@ -52,6 +52,18 @@
                         <input type="text" name="course" class="form-control">
                     </div>
 
+                    <!-- Duration -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Duration</label>
+                        <input type="text" name="duration" class="form-control">
+                    </div>
+
+                    <!-- Register No -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Register No</label>
+                        <input type="text" name="register_no" class="form-control">
+                    </div>
+
                     <!-- Phone -->
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Phone</label>
@@ -62,6 +74,12 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Address</label>
                         <textarea name="address" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <!-- Photo -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Upload Photo</label>
+                        <input type="file" name="photo" class="form-control">
                     </div>
 
                     <div class="d-grid">

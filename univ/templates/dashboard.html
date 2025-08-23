@@ -111,7 +111,7 @@
         </div>
     </div>
 
-    <!-- Profile (moved before logout) -->
+    <!-- Profile Section -->
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-body">
             <h4 class="fw-bold text-success mb-3">
@@ -133,11 +133,13 @@
                 </div>
                 <!-- Student Details -->
                 <div>
-                    <p><strong>Name:</strong> {{ student.user.username }}</p>
+                    <p><strong>Username:</strong> {{ student.user.username }}</p>
+                    <p><strong>Email:</strong> {{ student.user.email }}</p>
                     <p><strong>Register No:</strong> {{ student.register_no }}</p>
                     <p><strong>Course:</strong> {{ student.course }}</p>
                     <p><strong>Duration:</strong> {{ student.duration }}</p>
                     <p><strong>Phone:</strong> {{ student.phone }}</p>
+                    <p><strong>Address:</strong> {{ student.address }}</p>
                     {% if next_exam %}
                         <p><strong>Exam Date:</strong> {{ next_exam.date|date:"jS F Y" }}</p>
                         <p><strong>Exam Center:</strong> {{ next_exam.center }}</p>
