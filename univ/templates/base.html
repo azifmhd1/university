@@ -8,9 +8,7 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Add in base.html before </body> -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <style>
     body {
@@ -21,27 +19,49 @@
     }
     .navbar-custom .nav-link,
     .navbar-custom .navbar-brand {
-      color: white;
+      color: #f8f9fa;
     }
     .navbar-custom .nav-link:hover {
       text-decoration: underline;
     }
-    /* Sidebar full height */
-    .sidebar {
-      background-color: #f0f0f0;
-      padding: 15px;
-      min-height: 100vh;
-    }
-    .important-links a {
-      display: block;
-      padding: 6px 0;
-      color: #0d6efd;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-    .important-links a:hover {
-      text-decoration: underline;
-    }
+/* Body full height, no margin */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Override bootstrap offcanvas default white */
+.offcanvas,
+.offcanvas-start,
+.offcanvas-body,
+.offcanvas-header {
+  background: #1c60a6 !important;   /* 🔵 make entire sidebar blue */
+  color: #fff;
+}
+
+/* Sidebar links */
+.important-links {
+  padding: 0;   /* no extra spacing, since parent already has padding */
+}
+
+/* Links inside */
+.important-links a {
+  display: block;
+  padding: 12px 15px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.important-links a:hover {
+  background: #0d3d73;
+  transform: translateX(5px);
+}
     .footer {
       background: #212529;
       color: white;
@@ -71,22 +91,35 @@
       text-decoration: underline;
     }
     .latest-updates-container {
-      height: 200px;
+      height: 400px;
       overflow: hidden;
       position: relative;
     }
-    .latest-updates-content {
-      position: absolute;
-      animation: scroll-up 12s linear infinite;
-    }
-    .latest-updates-container:hover .latest-updates-content {
-      animation-play-state: paused;
-    }
-    @keyframes scroll-up {
-      0% { top: 100%; }
-      100% { top: -100%; }
-    }
-    /* Date Time text */
+    
+
+.latest-updates-content {
+  position: absolute;
+  animation: scroll-up 12s linear infinite;
+}
+
+/* Hover pause */
+.latest-updates-container:hover .latest-updates-content {
+  animation-play-state: paused;
+}
+
+/* Style for the text */
+.latest-updates-content p {
+  font-size: 1.1rem;   /* text valutham */
+  font-weight: 600;    /* bold */
+  margin-bottom: 12px; /* spacing */
+}
+
+@keyframes scroll-up {
+  0%   { top: 100%; }
+  100% { top: -100%; }
+}
+
+    
     #liveDateTime {
       color: #ffc107;
       font-weight: bold;
@@ -96,38 +129,48 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-custom">
-  <div class="container">
-    <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'home' %}">
-      <img src="{% static 'images/logo.png' %}" alt="Skillera University Logo" class="navbar-logo me-2">
-      Skillera University - Examinations
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-between" id="mainNavbar">
-      <!-- Left Nav -->
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
-      </ul>
+    <div class="container">
 
-      <!-- Center Date & Time -->
-      <span id="liveDateTime" class="mx-auto"></span>
+      <!-- Sidebar Trigger Button (LEFT SIDE) -->
+      <button class="btn btn-outline-light me-2" data-bs-toggle="offcanvas" data-bs-target="#importantSidebar">
+        <i class="fas fa-bars"></i>
+      </button>
 
-      <!-- Right Button -->
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="btn btn-warning text-dark ms-2" href="{% url 'student_login' %}">
-            Student Login
-          </a>
-        </li>
-      </ul>
+      <!-- Brand -->
+      <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'home' %}">
+        <img src="{% static 'images/logo.png' %}" alt="Skillera University Logo" class="navbar-logo me-2">
+        Skillera University
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-between" id="mainNavbar">
+        <!-- Left Nav -->
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+
+        <!-- Center Date & Time -->
+        <span id="liveDateTime" class="mx-auto"></span>
+
+        <!-- Right Buttons -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="btn btn-warning text-dark ms-2" href="{% url 'student_login' %}">
+              Student Login
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
+  <!-- Flash News -->
   <div class="flash-news">
     <marquee behavior="scroll" direction="left" scrollamount="5">
       📢 Admission 2025 Open | 🎓 Final Exam Timetable Published | 📝 Exam Fees Last Date: 25th August | 
@@ -135,29 +178,18 @@
     </marquee>
   </div>
 
+  <!-- Main Layout -->
   <div class="container-fluid mt-3 flex-grow-1">
     <div class="row flex-grow-1">
 
-      <div class="col-md-2 sidebar">
-        <h5>Important Links</h5>
-        <div class="important-links">
-          <a href="{% url 'whatsnew' %}">What's New</a>
-          <a href="{% url 'announcements' %}">Announcements</a>
-          <a href="{% url 'notifications' %}">Notifications</a>
-          <a href="{% url 'examfees' %}">Exam Fees</a>
-          <a href="{% url 'timetable' %}">Time Table</a>
-          <a href="{% url 'pressrelease' %}">Press Release</a>
-          <a href="{% url 'feedback' %}">Feedback</a>
-          <a href="{% url 'testimonials' %}">Testimonials</a>
-        </div>
-      </div>
-
-      <div class="col-md-8">
+      <!-- Center Content -->
+      <div class="col-md-10 mx-auto">
         {% block content %}{% endblock %}
       </div>
 
+      <!-- Right Sidebar -->
       <div class="col-md-2 sidebar">
-        <h5>Latest Updates</h5>
+        <h4>Latest Updates</h4>
         <div class="bg-light p-3 border rounded small latest-updates-container">
           <div class="latest-updates-content">
             <p>📢 New Course Registrations Open till 15th Aug</p>
@@ -175,6 +207,27 @@
     </div>
   </div>
 
+  <!-- Offcanvas Sidebar -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="importantSidebar">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title"></h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="important-links">
+        <a href="{% url 'whatsnew' %}">What's New</a>
+        <a href="{% url 'announcements' %}">Announcements</a>
+        <a href="{% url 'notifications' %}">Notifications</a>
+        <a href="{% url 'examfees' %}">Exam Fees</a>
+        <a href="{% url 'timetable' %}">Time Table</a>
+        <a href="{% url 'pressrelease' %}">Press Release</a>
+        <a href="{% url 'feedback' %}">Feedback</a>
+        <a href="{% url 'testimonials' %}">Testimonials</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <div class="footer mt-auto">
     <div class="container">
       <div class="row">

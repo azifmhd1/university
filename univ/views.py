@@ -12,6 +12,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4 
 from reportlab.lib.units import inch
 import io
+from .utils import send_whatsapp_message   # helper import
 
 
 from .forms import FeedbackForm
@@ -54,6 +55,18 @@ def student_login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
+
+            # Get student phone number
+            try:
+                student = Student.objects.get(user=user)
+                if student.phone:
+                    send_whatsapp_message(
+                        student.phone,
+                        f"Hi {user.username}, you logged in successfully! 🎉"
+                    )
+            except Student.DoesNotExist:
+                pass  # if no student profile found, just skip
+
             return redirect("dashboard")
         else:
             return render(request, "student_login.html", {"error": "Invalid username or password"})
@@ -67,7 +80,7 @@ def logout_view(request):
 # ---------------------- Student Pages ----------------------
 
 
-@login_required(login_url='student_login')
+
 def about(request):
     return render(request, 'about.html')
 
