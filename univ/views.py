@@ -1,51 +1,51 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse, FileResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.http import HttpResponse
 from django.conf import settings
-from .models import Student, Assessment, Notice, Exam, ExamFee
 from django.utils import timezone
-import razorpay
+from twilio.rest import Client
+
+
 from datetime import datetime
-from reportlab.lib.pagesizes import A4 
-from reportlab.lib.units import inch
 import io
-from .utils import send_whatsapp_message   # helper import
-
-
-from .forms import FeedbackForm
-from .models import Feedback, Student
+import razorpay
 from reportlab.pdfgen import canvas
-from io import BytesIO
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import A4, letter
+from reportlab.lib.units import inch
+
+from .models import Student, Assessment, Notice, Exam, ExamFee, Feedback
+from .forms import FeedbackForm
+from .utils import send_whatsapp_message
 
 
 # ---------------------- Public Pages ----------------------
 def home(request):
-    return render(request, 'home.html')
+    return render(request, "home.html")
 
 def whatsnew(request):
-    return render(request, 'whatsnew.html')
+    return render(request, "whatsnew.html")
 
 def announcements(request):
-    return render(request, 'announcements.html')
+    return render(request, "announcements.html")
 
 def notifications(request):
-    return render(request, 'notifications.html')
+    return render(request, "notifications.html")
 
 def timetable(request):
-    return render(request, 'timetable.html')
+    return render(request, "timetable.html")
 
 def pressrelease(request):
-    return render(request, 'pressrelease.html')
+    return render(request, "pressrelease.html")
 
 def readmore(request):
-    return render(request, 'readmore.html')
+    return render(request, "readmore.html")
 
 def contact(request):
-    return render(request, 'contact.html')
+    return render(request, "contact.html")
+
 
 # ---------------------- Authentication ----------------------
 def student_login(request):
@@ -53,10 +53,11 @@ def student_login(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
+
         if user is not None:
             login(request, user)
 
-            # Get student phone number
+            # WhatsApp alert
             try:
                 student = Student.objects.get(user=user)
                 if student.phone:
@@ -65,48 +66,50 @@ def student_login(request):
                         f"Hi {user.username}, you logged in successfully! 🎉"
                     )
             except Student.DoesNotExist:
-                pass  # if no student profile found, just skip
+                pass
 
             return redirect("dashboard")
         else:
             return render(request, "student_login.html", {"error": "Invalid username or password"})
     return render(request, "student_login.html")
 
-@login_required(login_url='student_login')
+
+@login_required(login_url="student_login")
 def logout_view(request):
     logout(request)
-    return redirect('student_login')
+    return redirect("student_login")
+
 
 # ---------------------- Student Pages ----------------------
-
-
-
 def about(request):
-    return render(request, 'about.html')
+    return render(request, "about.html")
 
-@login_required(login_url='student_login')
+@login_required(login_url="student_login")
 def my_courses(request):
-    return render(request, 'mycourses.html')
+    return render(request, "mycourses.html")
 
-@login_required(login_url='student_login')
+@login_required(login_url="student_login")
 def upcoming_events(request):
-    return render(request, 'upcomingevents.html')
+    return render(request, "upcomingevents.html")
+
 
 # ---------------------- Feedback ----------------------
 def feedback(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = FeedbackForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Thank you for your feedback!")
-            return redirect('feedback')
+            return redirect("feedback")
     else:
         form = FeedbackForm()
-    feedback_list = Feedback.objects.order_by('-created_at')
-    return render(request, 'feedback.html', {'form': form, 'feedback_list': feedback_list})
+
+    feedback_list = Feedback.objects.order_by("-created_at")
+    return render(request, "feedback.html", {"form": form, "feedback_list": feedback_list})
 
 def testimonials(request):
-    return render(request, 'testimonials.html')
+    return render(request, "testimonials.html")
+
 
 # ---------------------- Registration ----------------------
 def register(request):
@@ -121,24 +124,24 @@ def register(request):
 
         if password1 != password2:
             messages.error(request, "Passwords do not match.")
-            return redirect('register')
+            return redirect("register")
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already taken.")
-            return redirect('register')
+            return redirect("register")
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already registered.")
-            return redirect('register')
+            return redirect("register")
 
         user = User.objects.create_user(username=username, email=email, password=password1)
         Student.objects.create(user=user, course=course, phone=phone, address=address)
 
         messages.success(request, "Registration successful! Please login.")
-        return redirect('student_login')
-    return render(request, 'register.html')
+        return redirect("student_login")
+
+    return render(request, "register.html")
+
 
 # ---------------------- Exam Fees (Display Only) ----------------------
-from django.shortcuts import render
-
 def examfees(request):
     fees = [
         {"course": "BCom Semester 3", "fee": 1200, "late": 200, "last_date": "2025-09-15"},
@@ -147,19 +150,20 @@ def examfees(request):
     ]
     return render(request, "examfees.html", {"fees": fees})
 
+
 # ---------------------- Challan PDF ----------------------
 def download_challan(request):
-    course = request.GET.get('course', 'B.Com')
-    amount = request.GET.get('amount', '600')
-    last_date = request.GET.get('last_date', '10-Aug-2025')
+    course = request.GET.get("course", "B.Com")
+    amount = request.GET.get("amount", "600")
+    last_date = request.GET.get("last_date", "10-Aug-2025")
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="challan_{course}.pdf"'
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = f'attachment; filename="challan_{course}.pdf"'
 
     p = canvas.Canvas(response)
-    p.setFont('Helvetica-Bold', 16)
+    p.setFont("Helvetica-Bold", 16)
     p.drawString(60, 800, "Skillera University - Exam Fee Challan")
-    p.setFont('Helvetica', 12)
+    p.setFont("Helvetica", 12)
     p.drawString(60, 760, f"Course: {course}")
     p.drawString(60, 740, f"Amount (₹): {amount}")
     p.drawString(60, 720, f"Last Date: {last_date}")
@@ -168,21 +172,16 @@ def download_challan(request):
     p.save()
     return response
 
-from django.http import HttpResponse
 
 def download_timetable(request):
-    # PDF setup
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="timetable.pdf"'
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = "attachment; filename=timetable.pdf"
 
     p = canvas.Canvas(response)
 
-    # Current date & time
     now = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-
-    # PDF Content
     p.drawString(100, 780, "Exam Timetable")
-    p.drawString(100, 760, f"Generated on: {now}")  # 🔥 current date & time
+    p.drawString(100, 760, f"Generated on: {now}")
     p.drawString(100, 730, "Date: 20-08-2025 | Subject: Mathematics")
     p.drawString(100, 710, "Date: 22-08-2025 | Subject: Physics")
 
@@ -190,19 +189,21 @@ def download_timetable(request):
     p.save()
     return response
 
-@login_required(login_url='student_login')
+
+# ---------------------- Dashboard ----------------------
+# Dashboard
+@login_required(login_url="student_login")
 def dashboard(request):
     student = Student.objects.get(user=request.user)
 
-    # Pass User instead of Student
-    exam_fee, created = ExamFee.objects.get_or_create(student=request.user)
+    exam_fee, created = ExamFee.objects.get_or_create(student=student)
 
-    # Show only logged-in student's notices
-    notices = Notice.objects.filter(student=request.user).order_by('-created_at')[:5]
+    # Now Notice expects Student, not User
+    notices = Notice.objects.filter(student=student).order_by("-created_at")[:5]
 
     context = {
         "student": student,
-        "next_exam": Exam.objects.filter(student=student).order_by('date').first(),
+        "next_exam": Exam.objects.filter(student=student).order_by("date").first(),
         "assessments": Assessment.objects.filter(student=student),
         "notices": notices,
         "notices_count": notices.count(),
@@ -210,19 +211,22 @@ def dashboard(request):
         "razorpay_key": settings.RAZORPAY_KEY_ID,
     }
     return render(request, "dashboard.html", context)
+
+# ---------------------- Exam Fee Payment ----------------------
 @login_required
 def pay_exam_fee(request):
-    exam_fee = ExamFee.objects.get(student=request.user)
+    student = Student.objects.get(user=request.user)
+    exam_fee = ExamFee.objects.get(student=student)
 
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
     payment = client.order.create({
-        "amount": int(exam_fee.amount * 100),  # amount in paise
+        "amount": int(exam_fee.amount * 100),
         "currency": "INR",
-        "payment_capture": 1
+        "payment_capture": 1,
     })
 
-    exam_fee.order_id = payment['id']
+    exam_fee.order_id = payment["id"]
     exam_fee.save()
 
     context = {
@@ -236,17 +240,18 @@ def pay_exam_fee(request):
 
 @login_required
 def payment_success(request):
-    exam_fee = ExamFee.objects.get(student=request.user)
+    student = Student.objects.get(user=request.user)
+    exam_fee = ExamFee.objects.get(student=student)
+
     exam_fee.paid = True
     exam_fee.payment_date = timezone.now()
     exam_fee.save()
-    return redirect("dashboard")
-# views.py
-from django.http import FileResponse
-import io
-from reportlab.pdfgen import canvas
 
-@login_required(login_url='student_login')
+    return redirect("dashboard")
+
+
+# ---------------------- Admit Card PDF ----------------------
+@login_required(login_url="student_login")
 def download_admit_card(request):
     student = Student.objects.get(user=request.user)
 
@@ -255,27 +260,27 @@ def download_admit_card(request):
 
     width, height = A4
 
-    # 🔹 Title Banner
+    # Title Banner
     p.setFont("Helvetica-Bold", 20)
-    p.setFillColorRGB(0.2, 0.4, 0.8)  # Blue
+    p.setFillColorRGB(0.2, 0.4, 0.8)
     p.rect(0, height - 80, width, 60, fill=1)
-    p.setFillColorRGB(1, 1, 1)  # White text
+    p.setFillColorRGB(1, 1, 1)
     p.drawCentredString(width / 2, height - 55, "UNIVERSITY ADMIT CARD")
 
-    # 🔹 Generated date/time
     now = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
     p.setFont("Helvetica", 9)
     p.setFillColorRGB(0, 0, 0)
     p.drawRightString(width - 40, height - 90, f"Generated on: {now}")
 
-    # 🔹 Outer border
+    # Outer border
     p.setLineWidth(2)
     p.rect(30, 100, width - 60, height - 160)
 
-    # 🔹 Student Photo box
+    # Student Photo
     if student.photo and student.photo.path:
         try:
-            p.drawImage(student.photo.path, width - 170, height - 300, width=120, height=140, preserveAspectRatio=True, mask='auto')
+            p.drawImage(student.photo.path, width - 170, height - 300,
+                        width=120, height=140, preserveAspectRatio=True, mask="auto")
         except:
             p.rect(width - 170, height - 300, 120, 140)
             p.drawString(width - 160, height - 230, "Photo N/A")
@@ -283,7 +288,7 @@ def download_admit_card(request):
         p.rect(width - 170, height - 300, 120, 140)
         p.drawString(width - 160, height - 230, "Photo N/A")
 
-    # 🔹 Student Details
+    # Student Details
     p.setFont("Helvetica-Bold", 14)
     p.drawString(50, height - 140, "Student Details")
 
@@ -303,7 +308,7 @@ def download_admit_card(request):
         p.drawString(180, y, str(value))
         y -= line_gap
 
-    # 🔹 Exam Details
+    # Exam Details
     p.setFont("Helvetica-Bold", 14)
     p.drawString(50, y - 10, "Exam Details")
 
@@ -318,15 +323,62 @@ def download_admit_card(request):
         p.drawString(180, y, str(value))
         y -= line_gap
 
-    # 🔹 Signature box
+    # Signature
     p.rect(width - 250, 120, 180, 60)
     p.setFont("Helvetica", 12)
     p.drawCentredString(width - 160, 140, "Controller of Exams")
     p.setFont("Helvetica", 9)
     p.drawCentredString(width - 160, 125, "(Authorized Signatory)")
 
-    # ✅ Finalize PDF
+    # Finalize
     p.showPage()
     p.save()
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename="admit_card.pdf")
+
+from django.shortcuts import HttpResponse
+from django.core.mail import send_mail
+from django.utils import timezone
+from django.conf import settings
+from .utils import send_whatsapp_message
+from .models import Student
+
+def test_alert(request):
+    user = request.user
+    if not user.is_authenticated:
+        return HttpResponse("❌ Please login first to test alert.")
+
+    ts = timezone.localtime().strftime("%Y-%m-%d %H:%M:%S")
+    subject = "Test Alert - University Portal"
+    message = f"Hi {user.username}, this is a test alert at {ts}."
+    recipient = [user.email]
+
+    # Send Email
+    try:
+        send_mail(subject, message, settings.EMAIL_HOST_USER, recipient)
+    except Exception as e:
+        return HttpResponse(f"❌ Email failed: {e}")
+
+    # Send WhatsApp if phone exists
+    student = Student.objects.filter(user=user).first()
+    if student and student.phone:
+        try:
+            send_whatsapp_message(f"+91{student.phone}", message)
+        except Exception as e:
+            return HttpResponse(f"✅ Email sent, ❌ WhatsApp failed: {e}")
+
+    return HttpResponse("✅ Test alert sent via Email + WhatsApp")
+
+def send_whatsapp(request):
+
+    account_sid = "AC09a7ddcd8af97171b7a77e6c9a98b20"     # Twilio dashboard → Project Info
+    auth_token = "7343c29991f58139f29cf9a4c6e19a03"       # Twilio dashboard → Auth Token
+    client = Client(account_sid, auth_token)
+
+    message = client.messages.create(
+        from_="whatsapp:+14155238886",   # Twilio sandbox number
+        body="Hello from Django 🚀",
+        to="whatsapp:+91XXXXXXXXXX"      # ninte WhatsApp number country code oode
+    )
+
+    return HttpResponse(f"Message sent: {message.sid}")

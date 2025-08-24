@@ -70,20 +70,25 @@ class Exam(models.Model):
         return f"{self.exam_name} - {self.student}"
 
 class Notice(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField()
     date = models.DateField()
-    created_at = models.DateTimeField(default=timezone.now)  # instead of auto_now_add
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.title} - {self.student}"
+
+
 
 class ExamFee(models.Model):
-    student = models.OneToOneField(User, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=8, decimal_places=2, default=1000.00)  # exam fee default ₹1000
+    student = models.OneToOneField(Student, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=8, decimal_places=2, default=1000.00)
     paid = models.BooleanField(default=False)
     payment_date = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.student.username} - {'Paid' if self.paid else 'Pending'}"
+        return f"{self.student.user.username} - {'Paid' if self.paid else 'Pending'}"
 
 
 

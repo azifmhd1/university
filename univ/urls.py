@@ -32,7 +32,8 @@ urlpatterns = [
     path('download-admit-card/', views.download_admit_card, name='download_admit_card'),
     path("pay-exam-fee/", views.pay_exam_fee, name="pay_exam_fee"),
     path("payment-success/", views.payment_success, name="payment_success"),
-]
+    path("test-alert/", views.test_alert, name="test_alert"),
+    path("send-whatsapp/", views.send_whatsapp, name="send_whatsapp"),]
 
 if settings.DEBUG:  
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

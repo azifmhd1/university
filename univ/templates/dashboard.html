@@ -6,8 +6,9 @@
 {% block content %}
 <div class="container mt-4">
 
-    <!-- Welcome Hero -->
-    <div class="p-4 rounded-4 shadow-sm mb-4" style="background: linear-gradient(135deg, #0d6efd, #6610f2); color: white;">
+    <!-- 🔹 Welcome Hero -->
+    <div class="p-4 rounded-4 shadow-sm mb-4 text-white"
+         style="background: linear-gradient(135deg, #0d6efd, #6610f2);">
         <div class="d-flex align-items-center">
             <div class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center me-3"
                  style="width:70px; height:70px; font-size:1.5rem; font-weight: bold;">
@@ -20,7 +21,7 @@
         </div>
     </div>
 
-    <!-- New Notices (Updates) -->
+    <!-- 🔹 New Notices -->
     <div class="card shadow-sm border-0 rounded-4 mb-4">
         <div class="card-body">
             <div class="text-center">
@@ -28,27 +29,21 @@
                 <h5 class="fw-bold">New Updates</h5>
                 <p class="mb-3">{{ notices_count }} Updates</p>
             </div>
-
-            <!-- 🔔 Notices List -->
             <ul class="list-group list-group-flush">
                 {% for notice in notices %}
                     <li class="list-group-item">
                         <strong>{{ notice.title }}</strong><br>
-                        <small class="text-muted">
-                            {{ notice.created_at|date:"jS M Y, h:i A" }}
-                        </small>
+                        <small class="text-muted">{{ notice.created_at|date:"jS M Y, h:i A" }}</small>
                         <p class="mb-0">{{ notice.description }}</p>
                     </li>
                 {% empty %}
-                    <li class="list-group-item text-center text-muted">
-                        No updates available
-                    </li>
+                    <li class="list-group-item text-center text-muted">No updates available</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
 
-    <!-- Scheduled Assessments -->
+    <!-- 🔹 Scheduled Assessments -->
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-body">
             <h4 class="fw-bold text-warning mb-3">
@@ -74,7 +69,7 @@
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="4" class="text-center">No assessments scheduled</td>
+                            <td colspan="4" class="text-center text-muted">No assessments scheduled</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -83,16 +78,16 @@
         </div>
     </div>
 
-    <!-- Exam Fee Payment -->
+    <!-- 🔹 Exam Fee Payment -->
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-body">
             <h4 class="fw-bold text-info mb-3">
                 <i class="bi bi-cash-coin me-2"></i> Exam Fees
             </h4>
-            <div class="p-3 rounded-3" style="background: #f8f9fa;">
+            <div class="p-3 rounded-3 bg-light">
                 {% if exam_fee %}
                     <p><strong>Amount:</strong> ₹{{ exam_fee.amount }}</p>
-                    <p><strong>Status:</strong> 
+                    <p><strong>Status:</strong>
                         {% if exam_fee.paid %}
                             <span class="badge bg-success">Paid</span>
                         {% else %}
@@ -105,28 +100,28 @@
                         </a>
                     {% endif %}
                 {% else %}
-                    <p>No exam fee details available</p>
+                    <p class="text-muted">No exam fee details available</p>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <!-- Profile Section -->
+    <!-- 🔹 Profile Section -->
     <div class="card shadow-lg border-0 rounded-4 mb-4">
         <div class="card-body">
             <h4 class="fw-bold text-success mb-3">
                 <i class="bi bi-card-checklist me-2"></i> Profile
             </h4>
-            <div class="p-3 rounded-3 d-flex align-items-start" style="background: #f8f9fa;">
+            <div class="p-3 rounded-3 d-flex align-items-start bg-light">
                 <!-- Student Photo -->
                 <div class="me-3">
                     {% if student.photo %}
                         <img src="{{ student.photo.url }}" alt="Student Photo"
                              class="rounded-3 shadow-sm"
-                             style="width: 100px; height: 120px; object-fit: cover; border: 2px solid #ccc;">
+                             style="width:100px; height:120px; object-fit:cover; border:2px solid #ccc;">
                     {% else %}
                         <div class="d-flex align-items-center justify-content-center bg-light text-muted rounded-3"
-                             style="width: 100px; height: 120px; border: 2px dashed #ccc;">
+                             style="width:100px; height:120px; border:2px dashed #ccc;">
                             No Photo
                         </div>
                     {% endif %}
@@ -144,7 +139,7 @@
                         <p><strong>Exam Date:</strong> {{ next_exam.date|date:"jS F Y" }}</p>
                         <p><strong>Exam Center:</strong> {{ next_exam.center }}</p>
                     {% else %}
-                        <p>No exam scheduled</p>
+                        <p class="text-muted">No exam scheduled</p>
                     {% endif %}
                     <a href="{% url 'download_admit_card' %}" class="btn btn-primary mt-2">
                         <i class="bi bi-download me-1"></i> Download Admit Card
@@ -154,7 +149,7 @@
         </div>
     </div>
 
-    <!-- Logout -->
+    <!-- 🔹 Logout -->
     <div class="d-grid mt-3">
         <a href="{% url 'logout' %}" class="btn btn-danger btn-lg shadow rounded-4">
             <i class="bi bi-box-arrow-right me-2"></i> Logout
